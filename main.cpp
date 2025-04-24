@@ -23,7 +23,6 @@ void registerUser();
 void startCooking(string recipe);
 void showIngredients(int choice, int servings);
 void saveUserToFile(string fullName, string nick);
-void logCookingHistory(string nick, string recipeName, int servings);
 
 void showTitleScreen() {
     cout << "======================" << endl;
@@ -40,16 +39,6 @@ void saveUserToFile(string fullName, string nick) {
         outFile.close();
     } else {
         cout << "Error saving user info.\n";
-    }
-}
-
-void logCookingHistory(string nick, string recipeName, int servings) {
-    ofstream logFile("history.txt", ios::app);
-    if (logFile.is_open()) {
-        logFile << "User: " << nick << ", Recipe: " << recipeName << ", Servings: " << servings << endl;
-        logFile.close();
-    } else {
-        cout << "Error logging cooking history.\n";
     }
 }
 
@@ -120,10 +109,7 @@ void showDiscoverPage() {
                 cout << "Invalid input. Please enter a number.\n";
             }
         }
-
-        logCookingHistory(nickname, chosenRecipe, servings);
-        showIngredients(recipeChoice, servings);
-
+        
         int startChoice;
         while (true) {
             cout << "\nStep by step mode for " << chosenRecipe << "? (1 = Yes, 2 = No): ";
