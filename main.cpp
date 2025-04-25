@@ -29,6 +29,8 @@ void showTitleScreen() {
     cout << "       CookMe         " << endl;
     cout << "======================" << endl;
     cout << "Press Enter to begin...";
+    cin.ignore();
+    cin.get();
     registerUser();
 }
 
