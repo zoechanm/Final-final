@@ -62,104 +62,66 @@ void registerUser() {
     cout << "\nWelcome " << nickname << "! Press Enter to start your cooking adventure.";
     showMainMenu();
 }
-
 void showMainMenu() {
-    int choice = 0;
+    int choice;
+    cout<<"Would you like to start cooking?\n";
+    cout<<"1. Explore "<<endl;
+    cout<<"2. Exit"<<endl;
+    cout<<"Enter your choice: "; cin>>choice;
 
-    while (true) {
-        cout << "\n===== Main Menu =====" << endl;
-        cout << "1. Explore Recipes" << endl;
-        cout << "2. Exit" << endl;
-        cout << "Enter your choice (1-2): ";
-
-        if (cin >> choice) {
-            if (choice == 1) {
-                showDiscoverPage();
-                break;
-            } else if (choice == 2) {
-                cout << "\nThank you for using CookMe. Goodbye!\n";
-                break;
-            } else {
-                cout << "Invalid choice. Please enter 1 or 2.\n";
-            }
-        } else {
-            cout << "Invalid input. Please enter a number.\n";
-        }
+    if (choice == 1) {
+        showDiscoverPage(); //passes to Discover page
+    }else {
+        cout<<"Thank you for using CookMe. Goodbye!"; //Terminates
     }
 }
-
 void showDiscoverPage() {
-    while (true) {
-        int recipeChoice = showRecipes();
+    int recipeChoice = showRecipes();  //stores their choice
+    if (recipeChoice >= 1 && recipeChoice <= 6) {  //let the user choose
+        string chosenRecipe = recipes[recipeChoice - 1]; //adjust
 
-        if (recipeChoice == -1) {
-            continue;
-        }
+        int servings;
+        cout << "How many servings do you want to cook: ";
+        cin >> servings;
 
-        string chosenRecipe = recipes[recipeChoice - 1];
-        int servings = 0;
+        showIngredients(recipeChoice, servings); //pass to Dilbar's function
 
-        while (true) {
-            cout << "How many servings do you want to cook (1-10): ";
-            if (cin >> servings) {
-                if (servings >= 1 && servings <= 10) {
-                    break;
-                } else {
-                    cout << "Please enter a number between 1 and 10.\n";
-                }
-            } else {
-                cout << "Invalid input. Please enter a number.\n";
-            }
-        }
-        
         int startChoice;
-        while (true) {
-            cout << "\nStep by step mode for " << chosenRecipe << "? (1 = Yes, 2 = No): ";
-            if (cin >> startChoice) {
-                if (startChoice == 1 || startChoice == 2) {
-                    break;
-                } else {
-                    cout << "Please enter 1 or 2.\n";
-                }
-            } else {
-                cout << "Invalid input. Please enter a number.\n";
-            }
-        }
+        cout << "\nStep by step mode" << chosenRecipe << "? (1 = Yes, 2 = No): ";
+        cin >> startChoice;
 
         if (startChoice == 1) {
-            startCooking(chosenRecipe);
+            startCooking(chosenRecipe); //pass to cooking function
         } else {
             cout << "Returning to main menu...\n";
             showMainMenu();
         }
-        break;
+
+    } else {
+        cout << "Invalid choice. Returning to main menu.\n";
+        showMainMenu();  //again
     }
 }
 
-int showRecipes() {
-    cout << "\n--- Recommended Recipes ---" << endl;
-    for (int i = 0; i < NUM_RECIPES; i++) {
-        cout << i+1 << ". " << recipes[i] << " - " << cookingTimes[i] << endl;
+int showRecipes(){
+    cout<<endl<<"--- What we recommend for you to cook ---"<<endl;
+
+    for (int i = 0; i < 6; i++) {
+        cout<<i+1<<". "<<recipes[i]<<" - "<<cookingTimes[i]<<endl; //display list of dishes with their cooking time
     }
 
     int choice;
-    while (true) {
-        cout << "Choose a recipe (1-" << NUM_RECIPES << ") or 0 to return: ";
-        if (cin >> choice) {
-            if (choice == 0) {
-                showMainMenu();
-                return -1;
-            } else if (choice >= 1 && choice <= NUM_RECIPES) {
-                return choice;
-            } else {
-                cout << "Invalid choice. Please enter a number between 1 and " << NUM_RECIPES << ".\n";
-            }
-        } else {
-            cout << "Invalid input. Please enter a number.\n";
-        }
+    cout<<"Choose a recipe by entering a number(1-6): "<<endl;
+    cin>>choice;
+
+    if (choice >= 1 && choice <= 6) {
+        return choice; // just return the choice
+    } else {
+        cout << "Invalid selection. Returning to main menu.\n";
+        showMainMenu();
+        return -1;
     }
 }
-
 void showIngredients(int choice, int servings) {
     cout << "\n----- Ingredients for ";
     switch (choice) {
